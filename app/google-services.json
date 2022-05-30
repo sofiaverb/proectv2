@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1012238586723",
+    "project_id": "sofi-final-project-se",
+    "storage_bucket": "sofi-final-project-se.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1012238586723:android:fbb96ef35ab246ec23f956",
+        "android_client_info": {
+          "package_name": "com.example.proect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1012238586723-il6v4jtbg42d6d53p2thg3uig3oek9j3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUMp7dIsPVnQ6ryjpojYfh2eiH0Uzqt4o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1012238586723-il6v4jtbg42d6d53p2thg3uig3oek9j3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

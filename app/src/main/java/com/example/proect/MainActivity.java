@@ -1,14 +1,12 @@
 package com.example.proect;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends MyCustom_Activity implements View.OnClickListener {
 
     Button clst, create;
     Switch lock_shoes, lock_top, lock_bot;
@@ -17,7 +15,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        getSupportActionBar().hide(); //<< this
 
         clst = findViewById(R.id.btn_clst);
         clst.setOnClickListener(this);
@@ -35,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //todo generating and favourites
     public void onClick(View v) {
         if(clst == v) {
-            Intent c = new Intent(this, Closet.class);
+            Intent c = new Intent(this, Closet_Screen.class);
             startActivity(c);
         }
         if(v == create) {
