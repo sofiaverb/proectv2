@@ -2,6 +2,7 @@ package com.example.proect;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -14,13 +15,13 @@ import com.squareup.picasso.Picasso;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -30,8 +31,6 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 
 public class AddImage extends MyCustom_Activity implements View.OnClickListener {
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -47,7 +46,8 @@ public class AddImage extends MyCustom_Activity implements View.OnClickListener 
     private StorageTask upload_task;
     ActivityResultLauncher<String> result_content;
     String[] types = {"Select Type!", "Shoes", "Pants", "Shirts"};
-    String type_selected="";
+    String type_selected = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +88,7 @@ public class AddImage extends MyCustom_Activity implements View.OnClickListener 
         });
 
         //Creating the ArrayAdapter instance having the country list
-        ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item,types);
+        ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, types);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
         spinner_type.setAdapter(aa);
@@ -125,18 +125,17 @@ public class AddImage extends MyCustom_Activity implements View.OnClickListener 
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.button_choose_image:
                 openFileChooser();
                 break;
 
             case R.id.button_upload:
-                if(upload_task != null && upload_task.isInProgress()){
+                if (upload_task != null && upload_task.isInProgress()) {
                     Toast.makeText(AddImage.this,
                             "Upload in progress",
                             Toast.LENGTH_SHORT).show();
-                }
-                else{
+                } else {
                     uploadFile();
                 }
                 break;
@@ -153,7 +152,7 @@ public class AddImage extends MyCustom_Activity implements View.OnClickListener 
         startActivity(intent);
     }
 
-    private String getFileExtension(Uri uri){
+    private String getFileExtension(Uri uri) {
         ContentResolver cr = getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();  //singleton - https://techvidvan.com/tutorials/java-singleton-class/
 
@@ -161,10 +160,10 @@ public class AddImage extends MyCustom_Activity implements View.OnClickListener 
     }
 
     private void uploadFile() {
-        if(!type_selected.equals("Select Type!")){
-            if(uri_image != null ){
+        if (!type_selected.equals("Select Type!")) {
+            if (uri_image != null) {
                 StorageReference fileRef = storageRef.child(
-                        System.currentTimeMillis()+ "." + getFileExtension(uri_image));
+                        System.currentTimeMillis() + "." + getFileExtension(uri_image));
                 upload_task = fileRef.putFile(uri_image).addOnSuccessListener(
                         new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
@@ -175,14 +174,24 @@ public class AddImage extends MyCustom_Activity implements View.OnClickListener 
                                     public void run() {
                                         progressBar.setProgress(0);
                                     }
-                                },500);
+                                }, 500);
                                 Toast.makeText(AddImage.this,
                                         "Upload Successfully!", Toast.LENGTH_SHORT).show();
-                                Upload upload = new Upload(type_selected,
+                                //below code will create a bug (wont show images)- fix is below
+                                /*Upload upload = new Upload(type_selected,
                                         taskSnapshot.getMetadata().
                                                 getReference().getDownloadUrl().toString());
                                 String upLoadId = imageRef.push().getKey();
-                                imageRef.child(upLoadId).setValue(upload);
+                                imageRef.child(upLoadId).setValue(upload);*/
+                                Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                                while (!urlTask.isSuccessful()) ;
+                                Uri downloadUrl = urlTask.getResult();
+
+                                //Log.d(TAG, "onSuccess: firebase download url: " + downloadUrl.toString()); //use if testing...don't need this line.
+                                Upload upload = new Upload(type_selected, downloadUrl.toString());
+
+                                String uploadId = imageRef.push().getKey();
+                                imageRef.child(uploadId).setValue(upload);
                                 startActivity(new Intent(getApplicationContext(),
                                         Closet_Screen.class));
 
@@ -198,15 +207,15 @@ public class AddImage extends MyCustom_Activity implements View.OnClickListener 
                             @Override
                             public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
                                 double progress = (100.0 *
-                                        snapshot.getBytesTransferred()/snapshot.getTotalByteCount());
+                                        snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
                                 progressBar.setProgress((int) progress);
                             }
                         });
-            }else{
+            } else {
                 Toast.makeText(this,
                         "No File Selected!", Toast.LENGTH_SHORT).show();
             }
-        }else{
+        } else {
             Toast.makeText(AddImage.this,
                     "No Type Selected!", Toast.LENGTH_SHORT).show();
         }
