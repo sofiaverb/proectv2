@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 public class Closet_Screen extends MyCustom_Activity {
+    //todo - closet button will send a type to images-screen
     public static final int CAMERA_ACTION_CODE = 1;
     Button add;
     ActivityResultLauncher<Intent> arl;

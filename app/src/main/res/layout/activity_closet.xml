@@ -10,7 +10,7 @@
         android:id="@+id/adding"
         android:layout_width="163dp"
         android:layout_height="78dp"
-        android:text="ADD"
+        android:text="show"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

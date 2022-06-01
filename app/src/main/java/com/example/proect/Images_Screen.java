@@ -24,7 +24,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class Images_Screen extends MyCustom_Activity
-        implements CompoundButton.OnCheckedChangeListener, View.OnClickListener , ImageAdapter.OnItemClickListener{
+        implements CompoundButton.OnCheckedChangeListener ,
+        ImageAdapter.OnItemClickListener{
     private RadioGroup radioGroup_Cloth;
     private RadioButton radioButton_shirts;
     private RadioButton radioButton_pants;
@@ -34,15 +35,13 @@ public class Images_Screen extends MyCustom_Activity
     private ImageAdapter adapter;
     private DatabaseReference images_ref;
     private List<Upload> images;
-    private Button btn_create;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tops);
         images = new ArrayList<>();
-        btn_create = findViewById(R.id.btn_create);
-        btn_create.setOnClickListener(this);
+
         radioGroup_Cloth = findViewById(R.id.radioGroup_cloth);
         radioButton_shirts = findViewById(R.id.radioButton_shirts);
         radioButton_pants = findViewById(R.id.radioButton_pants);
@@ -57,15 +56,6 @@ public class Images_Screen extends MyCustom_Activity
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        radioButton_shirts.setOnCheckedChangeListener(new RadioButton.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                clearData();
-                showImages_ByType("Shirts");
-            }
-        });
-        adapter.notifyDataSetChanged();
         radioButton_pants.setOnCheckedChangeListener(this);
         radioButton_pants.setOnCheckedChangeListener(this);
         radioButton_shoes.setOnCheckedChangeListener(this);
@@ -88,7 +78,7 @@ public class Images_Screen extends MyCustom_Activity
                 adapter = new ImageAdapter(Images_Screen.this, images);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-                adapter.setOnItemClickListener((Images_Screen.this);
+                //adapter.setOnItemClickListener(Images_Screen.this);
             }
 
             @Override
@@ -134,10 +124,5 @@ public class Images_Screen extends MyCustom_Activity
             showImages_ByType("Shirts");
     }
 
-    @Override
-    public void onClick(View view) {
-        if (view == btn_create) {
 
-        }
-    }
 }
