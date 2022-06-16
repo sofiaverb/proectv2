@@ -1,5 +1,6 @@
 package com.example.proect;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -9,6 +10,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -35,13 +37,22 @@ public class Images_Screen extends MyCustom_Activity
     private ImageAdapter adapter;
     private DatabaseReference images_ref;
     private List<Upload> images;
+    private FloatingActionButton fb_addImage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tops);
         images = new ArrayList<>();
-
+        fb_addImage = findViewById(R.id.fb_addImage);
+        fb_addImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Images_Screen.this,
+                        AddImage.class));
+            }
+        });
         radioGroup_Cloth = findViewById(R.id.radioGroup_cloth);
         radioButton_shirts = findViewById(R.id.radioButton_shirts);
         radioButton_pants = findViewById(R.id.radioButton_pants);

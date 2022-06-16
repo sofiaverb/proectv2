@@ -53,8 +53,8 @@ public class MainActivity extends MyCustom_Activity implements View.OnClickListe
     //todo generating and favourites
     public void onClick(View v) {
         if(clst == v) {
-            Intent c = new Intent(this, Closet_Screen.class);
-            startActivity(c);
+            Intent intent = new Intent(MainActivity.this, Images_Screen.class);
+            startActivity(intent);
         }
         if(v == btn_create) {
             //TODO generator from database
@@ -80,8 +80,10 @@ public class MainActivity extends MyCustom_Activity implements View.OnClickListe
             //todo - correct randomly loop
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot != null) {
+
                     Random random = new Random();
                     int index = random.nextInt((int) dataSnapshot.getChildrenCount());
+
                     int count = 0;
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Upload cloth = snapshot.getValue(Upload.class);
